@@ -1,0 +1,19 @@
+- id: ansible_autodoc
+  name: Ansible autodoc
+  description: Inserts tags documentation into README.md (using ansible-autodoc).
+  require_serial: false
+  language: python
+  entry: ansible-autodoc -y
+  pass_filenames: false
+  types: []
+  files: \.y?ml$
+  exclude_types: [xml]
+  exclude: >
+    (?x)^(
+    .+.iml |
+    .+.gitignore |
+    \.gitlab-ci.*$ |
+    .+\.idea\/.*$ |
+    \.pre-commit.*$ |
+    requirements.*$
+    )$
