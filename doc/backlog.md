@@ -3,7 +3,7 @@
 list of documented items to change, solve or improve
 
 ## issues
-* when a yaml file with a special char is templated, an UnicodeEncodeError will be thrown 
+* when a yaml file with a special char is templated, an UnicodeEncodeError will be thrown
 * Improve test coverage
 * add template cli parameter
 

@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import os
 import sys
@@ -11,9 +12,9 @@ from ansibleautodoc import __version__
 try:
     from setuptools import setup, find_packages,Command
 except ImportError:
-    print("ansible-autodoc needs setuptools in order to build. Install it using"
-          " your package manager (usually python-setuptools) or via pip (pip"
-          " install setuptools).")
+    print('ansible-autodoc needs setuptools in order to build. Install it using'
+          ' your package manager (usually python-setuptools) or via pip (pip'
+          ' install setuptools).')
     sys.exit(1)
 
 # https://github.com/dave-shawley/setupext-janitor
@@ -30,12 +31,12 @@ if CleanCommand is not None:
 
 
 
-with open("README.md", "r") as fh:
+with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 def get_template_files():
     file_list = []
-    base_dir = "src/templates"
+    base_dir = 'src/templates'
     for file in glob.glob(base_dir+'/**/*.*', recursive=True):
         file_list.append(file)
     return file_list
@@ -43,16 +44,16 @@ def get_template_files():
 template_files = get_template_files()
 
 setup(
-    name="ansible-autodoc",
+    name='ansible-autodoc',
     version=__version__,
-    author="Andres Bott",
-    author_email="marc.abel.bisch@gmail.com",
+    author='Andres Bott',
+    author_email='marc.abel.bisch@gmail.com',
     description='Generate documentation from annotated playbooks and roles using templates',
     long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/apollocreed/ansible-autodoc",
+    long_description_content_type='text/markdown',
+    url='https://github.com/apollocreed/ansible-autodoc',
     package_dir={'': 'src'},
-    packages=find_packages("src"),
+    packages=find_packages('src'),
     include_package_data=True,
     classifiers=[
         'Environment :: Console',
@@ -80,4 +81,3 @@ setup(
     cmdclass=cmd_classes,
 
 )
-

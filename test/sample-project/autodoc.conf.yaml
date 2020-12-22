@@ -4,7 +4,7 @@
 # filename: autodoc.conf.yaml
 
 # base directoy to scan, relative dir to configuration file
-# base_dir: "./"
+base_dir: "./"
 
 # documentation output directory, relative dir to configuration file.
 # output_dir: "./doc"

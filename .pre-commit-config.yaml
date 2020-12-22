@@ -1,0 +1,46 @@
+---
+repos:
+
+  - repo: https://github.com/apollocreed/ansible-autodoc
+    rev: master
+    hooks:
+      - id: ansible_autodoc
+        args:
+          - ./test/test-project
+          - -C
+          - ./autodoc.config.yaml
+
+        ## Pre-commits
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-toml
+      - id: check-added-large-files
+      - id: check-yaml
+        args:
+          - --allow-multiple-documents
+      - id: check-merge-conflict
+      - id: check-byte-order-marker
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: pretty-format-json
+      - id: check-merge-conflict
+      - id: check-vcs-permalinks
+      - id: check-xml
+      - id: debug-statements
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: double-quote-string-fixer
+      - id: end-of-file-fixer
+      - id: fix-byte-order-marker
+      - id: fix-encoding-pragma
+      - id: forbid-new-submodules
+      - id: mixed-line-ending
+      - id: name-tests-test
+      - id: requirements-txt-fixer
+      - id:
+          sort-simple-yaml

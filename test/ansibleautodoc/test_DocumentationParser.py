@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 import os
 
 from ansibleautodoc.Config import SingleConfig
@@ -18,4 +19,3 @@ class TestDocumentationParser(object):
         # doc_generator = Generator({})
         # print(doc_generator.template_files)
         # assert doc_generator.template_files == ['Readme.md.j2', 'sub_dir/_sample_include.md.j2', 'sub_dir/subdir.md.j2']
-

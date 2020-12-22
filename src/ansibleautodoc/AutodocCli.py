@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import os
 import sys
@@ -34,21 +35,21 @@ class AnsibleAutodoc:
         # parser.add_argument('-t','--type', nargs='+', help='<Required> Set flag', required=True)
         # parser.add_argument('-t','--type', nargs='+', help='<Required> Set flag')
 
-        parser.add_argument('project_dir', nargs='?', default=os.getcwd(),help="Project directory to scan, "
-                                                                               "if empty current working will be used.")
-        parser.add_argument('-C',"--conf", nargs='?', default="",help="specify an configuration file")
-        parser.add_argument('-o', action="store", dest="output", type=str, help='Define the destination '
+        parser.add_argument('project_dir', nargs='?', default=os.getcwd(),help='Project directory to scan, '
+                                                                               'if empty current working will be used.')
+        parser.add_argument('-C','--conf', nargs='?', default='./autodoc.config.yaml',help='specify an configuration file')
+        parser.add_argument('-o', action='store', dest='output', type=str, help='Define the destination '
                                                                                'folder of your documenation')
         parser.add_argument('-y', action='store_true', help='overwrite the output without asking')
 
-        parser.add_argument('-D',"--dry", action='store_true', help='Dry run without writing')
+        parser.add_argument('-D','--dry', action='store_true', help='Dry run without writing')
 
-        parser.add_argument("--sample-config", action='store_true', help='Print the sample configuration yaml file')
+        parser.add_argument('--sample-config', action='store_true', help='Print the sample configuration yaml file')
 
-        parser.add_argument('-p', nargs='?', default="_unset_", help='use print template instead of writing to files, '
+        parser.add_argument('-p', nargs='?', default='_unset_', help='use print template instead of writing to files, '
                                                                      'sections: all, info, tags, todo, var')
 
-        parser.add_argument('-V',"--version", action='store_true', help='Get versions')
+        parser.add_argument('-V','--version', action='store_true', help='Get versions')
 
         debug_level = parser.add_mutually_exclusive_group()
         debug_level.add_argument('-v', action='store_true', help='Set debug level to info')
@@ -66,16 +67,16 @@ class AnsibleAutodoc:
         self.config.set_base_dir(os.path.abspath(args.project_dir))
 
         # search for config file
-        if args.conf != "":
+        if args.conf != '':
             conf_file = os.path.abspath(args.conf)
             if os.path.isfile(conf_file) and os.path.basename(conf_file) == self.config.config_file_name:
                 self.config.load_config_file(conf_file)
                 # re apply log level based on config
                 self.log.set_level(self.config.debug_level)
             else:
-                self.log.warn("No configuration file found: "+conf_file)
+                self.log.warn('No configuration file found: '+conf_file)
         else:
-            conf_file = self.config.get_base_dir()+"/"+self.config.config_file_name
+            conf_file = self.config.get_base_dir()+'/'+self.config.config_file_name
             if os.path.isfile(conf_file):
                 self.config.load_config_file(conf_file)
                 # re apply log level based on config
@@ -93,14 +94,14 @@ class AnsibleAutodoc:
 
         # Debug levels
         if args.v is True:
-            self.log.set_level("info")
+            self.log.set_level('info')
         elif args.vv is True:
-            self.log.set_level("debug")
+            self.log.set_level('debug')
         elif args.vvv is True:
-            self.log.set_level("trace")
+            self.log.set_level('trace')
 
         # need to send the message after the log levels have been set
-        self.log.debug("using configuration file: "+conf_file)
+        self.log.debug('using configuration file: '+conf_file)
 
         # Overwrite
         if args.y is True:
@@ -111,13 +112,13 @@ class AnsibleAutodoc:
             self.config.dry_run = True
             if self.log.log_level > 1:
                 self.log.set_level(1)
-                self.log.info("Running in Dry mode: Therefore setting log level at least to INFO")
+                self.log.info('Running in Dry mode: Therefore setting log level at least to INFO')
 
         # Print template
-        if args.p == "_unset_":
+        if args.p == '_unset_':
             pass
         elif args.p is None:
-            self.config.use_print_template = "all"
+            self.config.use_print_template = 'all'
         else:
             self.config.use_print_template = args.p
 
@@ -127,15 +128,15 @@ class AnsibleAutodoc:
 
         # some debug
         self.log.debug(args)
-        self.log.info("Using base dir: "+self.config.get_base_dir())
+        self.log.info('Using base dir: '+self.config.get_base_dir())
 
         if self.config.is_role:
-            self.log.info("This is detected as: ROLE ")
+            self.log.info('This is detected as: ROLE ')
         elif self.config.is_role is not None and not self.config.is_role:
-            self.log.info("This is detected as: PLAYBOOK ")
+            self.log.info('This is detected as: PLAYBOOK ')
         else:
             self.log.error([
-                self.config.get_base_dir()+"/roles",
-                self.config.get_base_dir()+"/tasks"
-            ],"No ansible root project found, checked for: ")
+                self.config.get_base_dir()+'/roles',
+                self.config.get_base_dir()+'/tasks'
+            ],'No ansible root project found, checked for: ')
             sys.exit(1)

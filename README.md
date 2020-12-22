@@ -1,6 +1,6 @@
 # ansible-autodoc
 
-[![CircleCI](https://circleci.com/gh/AndresBott/ansible-autodoc/tree/master.svg?style=svg)](https://circleci.com/gh/AndresBott/ansible-autodoc/tree/master)
+[![CircleCI](https://circleci.com/gh/apollocreed/ansible-autodoc/tree/master.svg?style=svg)](https://circleci.com/gh/AndresBott/ansible-autodoc/tree/master)
 
 Generate documentation from annotated playbooks and roles using templates.
 
@@ -15,20 +15,20 @@ Generate documentation from annotated playbooks and roles using templates.
 # Getting started
 
 ```
-# install 
+# install
 pip install ansible-autodoc
 
-# print help 
-ansible-autodoc -h 
+# print help
+ansible-autodoc -h
 
-# print parsed annotation results in the cli 
-ansible-autodoc -p all path/to/role_or_playbook 
+# print parsed annotation results in the cli
+ansible-autodoc -p all path/to/role_or_playbook
 
-# generate README file based on annotations  
-ansible-autodoc [path/to/project] 
-``` 
+# generate README file based on annotations
+ansible-autodoc [path/to/project]
+```
 
-notes: 
+notes:
 * you can use [grip](https://pypi.org/project/grip/) to see the live changes.
 * this only runs with python 3, if you still have python 2.x use pip3
 
@@ -44,46 +44,46 @@ check below list of useful metadata
   * name: to define a different role/project name instead of the folder name
   * license: (self explanatory)
   * email: (self explanatory)
-  
+
 ```yaml
 # @meta author: Author Name
 # @meta description: Project description
-```  
+```
 * __todo:__ use @todo to annotate improvements, bugs etc
 ```yaml
 # @todo bug: bug description
-# @todo improvement: improvement 
+# @todo improvement: improvement
 ```
 
 * __action:__ use @action to annotate a actions performed by the playbook/role
 ```yaml
-# @action install # this action describes the installation  
-# @action # this action does not have a section, only description 
+# @action install # this action describes the installation
+# @action # this action does not have a section, only description
 ```
 
 * __tags:__ use @tag to annotate tags, this is a special annotation as this will not only search for annotations,
 but also for used tags in the project and add that to the generated output.
 ```yaml
-# @tag tagname # tag description   
+# @tag tagname # tag description
 ```
 
 
 * __variables:__ use @var this to annotate configuration variables
 ```yaml
-# @var my_var: default_value # description of the variable   
+# @var my_var: default_value # description of the variable
 ```
 
 * __example:__ the idea is that after every annotation, we can define an example block, linked to the annotation.
 in this case the example will be part of the var annotation.
 ```yaml
-# @var my_var: default_value # description of the variable   
+# @var my_var: default_value # description of the variable
 my_var: default_value
 # @example # the hash is needed due to the parser constrains
 # my_var:
 #  - subitem: string
 #  - subitem2: string
 # @end
-``` 
+```
 
 # Templates
 
@@ -105,7 +105,7 @@ The default "readme" template will generate a README.md file in the root of the 
 * license
 * author information
 
-you can extend this my creating a file `"_readme_doby.md"` in the root of your project, this will be included in the rendered Readme just after the 
+you can extend this my creating a file `"_readme_doby.md"` in the root of your project, this will be included in the rendered Readme just after the
 initial description.
 
 ### Doc and README
@@ -113,10 +113,10 @@ initial description.
 The "doc_and_readme" template is an extended template intended to be used playbook projects with several roles, it will generate a minimal
 README.md file and a documentation subfolder "doc" with more detailed information.
 
-you can extend this my creating a file `"_readme_doby.md"` in the root of your project, this will be included in the rendered Readme just after the 
+you can extend this my creating a file `"_readme_doby.md"` in the root of your project, this will be included in the rendered Readme just after the
 initial description.
- 
-the files created in the documentation folder will cover: 
+
+the files created in the documentation folder will cover:
 
 * tags: list all tags classified by roles
 * variables: list all variables classified by roles
@@ -126,7 +126,7 @@ the files created in the documentation folder will cover:
 you can extend the documentation in this folder, just keep in mind that generated files will be overwritten.
 
 
-### Command line 
+### Command line
 
 The "cliprint" template is used to display the content when you use the command line print parameter "-p"
 
@@ -137,10 +137,43 @@ several behaviours, see the sample config file for more details:
 
 ```$xslt
 # role or project with playbooks
-$ cd <project> 
+$ cd <project>
 
-# create sample configuration (optional) 
+# create sample configuration (optional)
 # you can pass the options as parameters too
 $ ansible-autodoc --sample-config > autodoc.config.yaml
 ```
 
+## Pre-commit hook
+
+~~~bash
+pip install pre-commit
+# Feel .pre-commit-config.yaml as showed below
+pre-commit install
+pre-commit run --all-files
+~~~
+
+Sample ``.pre-commit-config.yaml``
+
+~~~yaml
+-   repo: https://gitlab.com/apollocreed/ansible-autodoc
+    rev: 1.0.0
+    hooks:
+      - id: ansible_autodoc
+~~~
+
+To specify your own ``autodoc.config.yaml`` file
+
+~~~yaml
+-   repo: https://gitlab.com/apollocreed/ansible-autodoc
+    rev: 1.0.0
+    hooks:
+      - id: ansible_autodoc
+        args:
+          - .
+          - -o
+          - doc
+          - -C
+          - autodoc.config.yaml
+# You can continue this logic for all argument of CLI
+~~~

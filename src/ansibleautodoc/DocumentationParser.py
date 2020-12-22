@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import os
 
@@ -38,7 +39,7 @@ class Parser:
         Generate the documentation data object
         """
         for annotaion in self.config.get_annotations_names(special=True, automatic=True):
-            self.log.info("Finding annotations for: @"+annotaion)
+            self.log.info('Finding annotations for: @'+annotaion)
             self._annotation_objs[annotaion] = Annotation(name=annotaion, files_registry=self._files_registry)
             self._annotation_data[annotaion] = self._annotation_objs[annotaion].get_details()
 
@@ -56,19 +57,19 @@ class Parser:
 
     def include(self,filename):
         base =self.config.get_base_dir()
-        base += "/"+filename
+        base += '/'+filename
         base = os.path.abspath(base)
-        self.log.debug("try to include:"+base)
+        self.log.debug('try to include:'+base)
         if os.path.isfile(base):
-            text_file = open(base, "r")
+            text_file = open(base, 'r')
             lines = text_file.readlines()
-            out = ""
+            out = ''
             for line in lines:
                 out += line
             return out
         else:
             # return "[include] file: "+base+" not found"
-            return ""
+            return ''
 
     def is_role(self):
         return self.config.is_role
@@ -79,16 +80,16 @@ class Parser:
     def cli_print_section(self):
         return self.config.use_print_template
 
-    def _get_annotation(self,name,role="all",return_keys=False,return_item=None,return_multi=False):
+    def _get_annotation(self,name,role='all',return_keys=False,return_item=None,return_multi=False):
         if name in self._annotation_objs.keys():
             data = self._annotation_objs[name].get_details()
 
-            if role == "all":
-                r_data = data["all"]
-            elif role in data["role_items"].keys():
-                r_data = data["role_items"][role]
-            elif role == "play" and PLAYBOOK_ROLE_NAME in data["role_items"].keys():
-                r_data = data["role_items"][PLAYBOOK_ROLE_NAME]
+            if role == 'all':
+                r_data = data['all']
+            elif role in data['role_items'].keys():
+                r_data = data['role_items'][role]
+            elif role == 'play' and PLAYBOOK_ROLE_NAME in data['role_items'].keys():
+                r_data = data['role_items'][PLAYBOOK_ROLE_NAME]
             else:
                 r_data = {}
 
@@ -99,7 +100,7 @@ class Parser:
                 if return_item in r_data.keys():
                     return r_data[return_item]
                 else:
-                    return ""
+                    return ''
             elif return_multi and self.allow_multiple(name):
                 return r_data.items()
             else:
@@ -119,24 +120,24 @@ class Parser:
         else:
             return None
 
-    def get_type(self,name,role="all"):
+    def get_type(self,name,role='all'):
         return self._get_annotation(name,role)
 
-    def get_multi_type(self,name,role="all"):
+    def get_multi_type(self,name,role='all'):
         return self._get_annotation(name,role,return_multi=True)
 
-    def get_keys(self,name,role="all"):
+    def get_keys(self,name,role='all'):
         return self._get_annotation(name,role,True)
 
-    def get_item(self,name,key,role="all"):
+    def get_item(self,name,key,role='all'):
         return self._get_annotation(name,role,False,key)
 
     def get_duplicates(self,name):
         if name in self._annotation_objs.keys():
             data = self._annotation_objs[name].get_details()
-            return data["duplicates"].items()
+            return data['duplicates'].items()
 
-    def has_items(self,name,role="all"):
+    def has_items(self,name,role='all'):
         if len(self._get_annotation(name,role)) > 0:
             return True
         else:
@@ -144,42 +145,25 @@ class Parser:
 
     def allow_multiple(self,name):
         if name in self.config.annotations:
-            if "allow_multiple" in self.config.annotations[name].keys() and self.config.annotations[name]["allow_multiple"]:
+            if 'allow_multiple' in self.config.annotations[name].keys() and self.config.annotations[name]['allow_multiple']:
                 return True
         return False
 
-    def cli_left_space(self,item1="",l=25):
+    def cli_left_space(self,item1='',l=25):
         item1 = item1.ljust(l)
         return item1
 
     def capitalize(self,s):
         return s.capitalize()
 
-    def fprn(self,string,re="Playbook"):
-        if string == "_ansible_playbook_":
+    def fprn(self,string,re='Playbook'):
+        if string == '_ansible_playbook_':
             return re
         else:
             return string
-    def about(self,l="md"):
-        if l == "md":
-            return "Documentation generated using: ["+self.config.autodoc_name+"]("+self.config.autodoc_url+")"
+    def about(self,l='md'):
+        if l == 'md':
+            return 'Documentation generated using: ['+self.config.autodoc_name+']('+self.config.autodoc_url+')'
 
     def test(self):
-        return "test()"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return 'test()'

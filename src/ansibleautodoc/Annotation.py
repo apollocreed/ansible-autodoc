@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import yaml
 import re
@@ -11,36 +12,36 @@ from ansibleautodoc.FileRegistry import Registry
 
 class AnnotationItem:
 
-    key = ""  # annotation identifying key
-    value = ""  # annotation data
-    desc = ""  # annotation longer description
-    role = ""  # associated role
-    file = ""  # file of the annotation
-    line = ""  # line of the annotation
-    example = ""  # add an example item iof defined: @example
+    key = ''  # annotation identifying key
+    value = ''  # annotation data
+    desc = ''  # annotation longer description
+    role = ''  # associated role
+    file = ''  # file of the annotation
+    line = ''  # line of the annotation
+    example = ''  # add an example item iof defined: @example
 
     # next time improve this by looping over public available attributes
     def __str__(self):
-        s = "{"
-        s += "key: "+self.key+", "
-        s += "value: "+self.value+", "
-        s += "desc: "+self.desc+", "
-        s += "role: "+self.role+", "
-        s += "file: "+self.file+", "
-        s += "line: "+self.line+" "
-        s += "line: "+self.example+" "
-        s += "}"
+        s = '{'
+        s += 'key: '+self.key+', '
+        s += 'value: '+self.value+', '
+        s += 'desc: '+self.desc+', '
+        s += 'role: '+self.role+', '
+        s += 'file: '+self.file+', '
+        s += 'line: '+self.line+' '
+        s += 'line: '+self.example+' '
+        s += '}'
         return s
 
     def get_obj(self):
         return {
-            "key": self.key,
-            "value": self.value,
-            "desc": self.desc,
-            "role": self.role,
-            "file": self.file,
-            "line": self.line,
-            "example": self.example,
+            'key': self.key,
+            'value': self.value,
+            'desc': self.desc,
+            'role': self.role,
+            'file': self.file,
+            'line': self.line,
+            'example': self.example,
         }
 
 
@@ -72,7 +73,7 @@ class Annotation:
             self._annotation_definition = self._all_annotations[name]
 
             # check for allow multiple
-            if "allow_multiple" in self._annotation_definition.keys() and self._annotation_definition["allow_multiple"] == True:
+            if 'allow_multiple' in self._annotation_definition.keys() and self._annotation_definition['allow_multiple'] == True:
                 self._allow_multiple = True
 
             else:
@@ -85,20 +86,20 @@ class Annotation:
         if self._annotation_definition is not None:
             self._find_annotation()
 
-        if "special" in self._annotation_definition.keys() and self._annotation_definition["special"]:
-            if name == "tag":
+        if 'special' in self._annotation_definition.keys() and self._annotation_definition['special']:
+            if name == 'tag':
                 self._find_tags()
 
     def get_details(self):
         return {
-            "all": self._all_items,
-            "duplicates": self._duplucate_items,
-            "role_items": self._role_items,
+            'all': self._all_items,
+            'duplicates': self._duplucate_items,
+            'role_items': self._role_items,
         }
 
     def _find_annotation(self):
 
-        regex = "(\#\ *\@"+self._annotation_definition["name"]+"\ +.*)"
+        regex = '(\#\ *\@'+self._annotation_definition['name']+'\ +.*)'
         for role, files_in_role in self._files_registry.get_files().items():
 
             for file in files_in_role:
@@ -115,7 +116,7 @@ class Annotation:
                         break
 
                     if re.match(regex, line):
-                        item = self._get_annotation_data(line,self._annotation_definition["name"])
+                        item = self._get_annotation_data(line,self._annotation_definition['name'])
                         # print(item.get_obj())
                         self._populate_item(item)
 
@@ -177,26 +178,26 @@ class Annotation:
 
         # step1 remove the annotation
         # reg1 = "(\#\ *\@"++"\ *)"
-        reg1 = "(\#\ *\@"+name+"\ *)"
+        reg1 = '(\#\ *\@'+name+'\ *)'
         line1 = re.sub(reg1, '', line).strip()
 
         # print("line1: '"+line1+"'")
         # step2 split annotation and comment by #
-        parts = line1.split("#")
+        parts = line1.split('#')
 
         # step3 take the main key value from the annotation
-        subparts = parts[0].split(":",1)
+        subparts = parts[0].split(':',1)
 
         key = str(subparts[0].strip())
-        if key.strip() == "":
-            key = "_unset_"
+        if key.strip() == '':
+            key = '_unset_'
         item.key = key
 
         if len(subparts)>1:
             item.value = subparts[1].strip()
 
         # step4 check for multiline description
-        multiline = ""
+        multiline = ''
         stars_with_annotation = '(\#\ *[\@][\w]+)'
         current_file_position = self._file_handler.tell()
 
@@ -212,37 +213,37 @@ class Annotation:
                 self._file_handler.seek(current_file_position)
                 break
             # match if empty line or commented empty line
-            test_line = next_line.replace("#", "").strip()
+            test_line = next_line.replace('#', '').strip()
             if len(test_line) == 0:
                 self._file_handler.seek(current_file_position)
                 break
 
             # match if does not start with comment
             test_line2 = next_line.strip()
-            if test_line2[:1] != "#":
+            if test_line2[:1] != '#':
                 self._file_handler.seek(current_file_position)
                 break
 
-            if name == "example":
-                multiline += next_line.replace("#", "", 1)
+            if name == 'example':
+                multiline += next_line.replace('#', '', 1)
             else:
-                multiline += " "+test_line.strip()
+                multiline += ' '+test_line.strip()
 
         # step5 take the description, there is something after #
         if len(parts) > 1:
             desc = parts[1].strip()
-            desc += " "+multiline.strip()
+            desc += ' '+multiline.strip()
             item.desc = desc.strip()
-        elif multiline != "":
+        elif multiline != '':
             item.desc = multiline.strip()
 
         # step5, check for @example
-        example = ""
+        example = ''
 
-        if name != "example":
+        if name != 'example':
 
             current_file_position = self._file_handler.tell()
-            example_regex = "(\#\ *\@example\ +.*)"
+            example_regex = '(\#\ *\@example\ +.*)'
 
             while True:
                 next_line = self._file_handler.readline()
@@ -252,16 +253,16 @@ class Annotation:
 
                 # exit if next annotation is not @example
                 if re.match(stars_with_annotation, next_line):
-                    if "@example" not in next_line:
+                    if '@example' not in next_line:
                         self._file_handler.seek(current_file_position)
                         break
 
                 if re.match(example_regex, next_line):
-                    example = self._get_annotation_data(next_line,"example")
+                    example = self._get_annotation_data(next_line,'example')
                     # pprint.pprint(example.get_obj())
                     self._file_handler.seek(current_file_position)
                     break
-        if example != "":
+        if example != '':
             item.example = example.get_obj()
 
         return item
@@ -273,7 +274,7 @@ class Annotation:
                 with open(file, 'r',encoding='utf8') as yaml_file:
                     try:
                         data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
-                        tags_found = Annotation.find_tag("tags",data)
+                        tags_found = Annotation.find_tag('tags',data)
 
                         for tag in tags_found:
                             if tag not in self.config.excluded_tags:
@@ -291,7 +292,7 @@ class Annotation:
 
                                 # if already in all tags, check if its from the same role
                                 # if not, add to duplicate
-                                elif role != self._all_items[tag]["role"]:
+                                elif role != self._all_items[tag]['role']:
                                     if tag not in self._duplucate_items.keys():
                                         self._duplucate_items[tag] = []
                                         self._duplucate_items[tag].append(self._all_items[tag])
