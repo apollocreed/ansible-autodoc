@@ -41,7 +41,7 @@ class AnsibleAutodoc:
                                                                                'folder of your documenation')
         parser.add_argument('-y', action='store_true', help='overwrite the output without asking')
 
-        parser.add_argument('-D',"--dry", action='store_true', help='Dry runt without writing')
+        parser.add_argument('-D',"--dry", action='store_true', help='Dry run without writing')
 
         parser.add_argument("--sample-config", action='store_true', help='Print the sample configuration yaml file')
 

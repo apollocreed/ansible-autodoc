@@ -16,4 +16,4 @@ clean `./setup.py clean --all`
 
 build `./setup.py sdist bdist_wheel`
 
-upload `twine upload dist/*`
+upload `twine upload --repository-url https://pypi.org/legacy/ dist/*`

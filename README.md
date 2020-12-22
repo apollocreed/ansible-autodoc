@@ -1,5 +1,7 @@
 # ansible-autodoc
 
+[![CircleCI](https://circleci.com/gh/AndresBott/ansible-autodoc/tree/master.svg?style=svg)](https://circleci.com/gh/AndresBott/ansible-autodoc/tree/master)
+
 Generate documentation from annotated playbooks and roles using templates.
 
     Note: this project is currently in Beta, issues, ideas and pull requests are welcome.
@@ -101,7 +103,7 @@ The default "readme" template will generate a README.md file in the root of the 
 * variables
 * todos
 * license
-* author infomration
+* author information
 
 you can extend this my creating a file `"_readme_doby.md"` in the root of your project, this will be included in the rendered Readme just after the 
 initial description.
@@ -139,6 +141,6 @@ $ cd <project>
 
 # create sample configuration (optional) 
 # you can pass the options as parameters too
-$ ansible-autodoc --sample-doc > autodoc.config.yaml
+$ ansible-autodoc --sample-config > autodoc.config.yaml
 ```
 
